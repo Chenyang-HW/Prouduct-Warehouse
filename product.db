@@ -1,0 +1,238 @@
+-- MySQL dump 10.13  Distrib 5.7.25, for Win64 (x86_64)
+--
+-- Host: localhost    Database: product
+-- ------------------------------------------------------
+-- Server version	5.7.25-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `country`
+--
+
+DROP TABLE IF EXISTS `country`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `country` (
+  `country_id` int(11) NOT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `traiff_rate` float DEFAULT '0',
+  PRIMARY KEY (`country_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `country`
+--
+
+LOCK TABLES `country` WRITE;
+/*!40000 ALTER TABLE `country` DISABLE KEYS */;
+INSERT INTO `country` VALUES (1,'America',0.25),(3,'Japan',0.05),(21,'China',0.25);
+/*!40000 ALTER TABLE `country` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `database_manager`
+--
+
+DROP TABLE IF EXISTS `database_manager`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `database_manager` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `database_manager`
+--
+
+LOCK TABLES `database_manager` WRITE;
+/*!40000 ALTER TABLE `database_manager` DISABLE KEYS */;
+INSERT INTO `database_manager` VALUES (1,'donlin','123456'),(2,'liuchenyang','a123');
+/*!40000 ALTER TABLE `database_manager` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `hat`
+--
+
+DROP TABLE IF EXISTS `hat`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `hat` (
+  `product_id` int(11) NOT NULL,
+  `style` enum('Army','Baseball','Beanie','Berets','Boater','Bowler') DEFAULT NULL,
+  PRIMARY KEY (`product_id`),
+  CONSTRAINT `hat_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `hat`
+--
+
+LOCK TABLES `hat` WRITE;
+/*!40000 ALTER TABLE `hat` DISABLE KEYS */;
+INSERT INTO `hat` VALUES (1,'Army');
+/*!40000 ALTER TABLE `hat` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `manager`
+--
+
+DROP TABLE IF EXISTS `manager`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `manager` (
+  `manager_id` int(11) NOT NULL,
+  `sex` enum('male','female') DEFAULT 'male',
+  `name` varchar(100) DEFAULT NULL,
+  `enroll_date` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`manager_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `manager`
+--
+
+LOCK TABLES `manager` WRITE;
+/*!40000 ALTER TABLE `manager` DISABLE KEYS */;
+INSERT INTO `manager` VALUES (1,'male','Bob','2019-05-22 21:13:19'),(2,'male','John','2019-05-22 21:13:33');
+/*!40000 ALTER TABLE `manager` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `origin_city`
+--
+
+DROP TABLE IF EXISTS `origin_city`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `origin_city` (
+  `city_id` int(11) NOT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `country_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`city_id`),
+  KEY `country_id` (`country_id`),
+  CONSTRAINT `origin_city_ibfk_1` FOREIGN KEY (`country_id`) REFERENCES `country` (`country_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `origin_city`
+--
+
+LOCK TABLES `origin_city` WRITE;
+/*!40000 ALTER TABLE `origin_city` DISABLE KEYS */;
+INSERT INTO `origin_city` VALUES (1,'Beijing',21),(2,'Chigago',1),(3,'Tokyo',3);
+/*!40000 ALTER TABLE `origin_city` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `product`
+--
+
+DROP TABLE IF EXISTS `product`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `product` (
+  `product_id` int(11) NOT NULL,
+  `amount` int(11) DEFAULT '0',
+  `name` varchar(100) DEFAULT NULL,
+  `made_date` datetime DEFAULT CURRENT_TIMESTAMP,
+  `category` enum('hat','shoes','trousers') DEFAULT 'hat',
+  `city_id` int(11) DEFAULT NULL,
+  `manager_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`product_id`),
+  KEY `city_id` (`city_id`),
+  KEY `manager_id` (`manager_id`),
+  CONSTRAINT `product_ibfk_1` FOREIGN KEY (`city_id`) REFERENCES `origin_city` (`city_id`),
+  CONSTRAINT `product_ibfk_2` FOREIGN KEY (`manager_id`) REFERENCES `manager` (`manager_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `product`
+--
+
+LOCK TABLES `product` WRITE;
+/*!40000 ALTER TABLE `product` DISABLE KEYS */;
+INSERT INTO `product` VALUES (1,123,'Trump','2019-05-22 21:14:19','hat',1,1),(2,234,'Donload','2019-05-22 21:14:41','trousers',2,2),(3,456,'DJ_Trump','2019-05-22 21:16:49','shoes',3,2);
+/*!40000 ALTER TABLE `product` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `shoes`
+--
+
+DROP TABLE IF EXISTS `shoes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `shoes` (
+  `product_id` int(11) NOT NULL,
+  `size` int(11) DEFAULT '20',
+  PRIMARY KEY (`product_id`),
+  CONSTRAINT `shoes_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `shoes`
+--
+
+LOCK TABLES `shoes` WRITE;
+/*!40000 ALTER TABLE `shoes` DISABLE KEYS */;
+INSERT INTO `shoes` VALUES (3,42);
+/*!40000 ALTER TABLE `shoes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `trousers`
+--
+
+DROP TABLE IF EXISTS `trousers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `trousers` (
+  `product_id` int(11) NOT NULL,
+  `length` int(11) DEFAULT '80',
+  PRIMARY KEY (`product_id`),
+  CONSTRAINT `trousers_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `trousers`
+--
+
+LOCK TABLES `trousers` WRITE;
+/*!40000 ALTER TABLE `trousers` DISABLE KEYS */;
+INSERT INTO `trousers` VALUES (2,165);
+/*!40000 ALTER TABLE `trousers` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2019-05-22 22:35:59
